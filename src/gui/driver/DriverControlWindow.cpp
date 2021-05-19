@@ -1,5 +1,6 @@
 #include "DriverControlWindow.h"
 #include "core/driver/DriverControl.h"
+#include "settings/GlobalSettings.h"
 
 #include <QMessageBox>
 #include <QtDebug>
@@ -24,10 +25,22 @@ DriverControlWindow::~DriverControlWindow()
 	qDebug() << "~DriverControlWindow";
 }
 
+#include <string_view>
+#include <string>
+
 void DriverControlWindow::showEvent(QShowEvent* event)
 {
 	Q_UNUSED(event);
+	QString driverFilePath;
+	GSetting.GetDriverBinaryFilePath(driverFilePath);
 
+	if (driverFilePath.isEmpty())
+		return;
+
+	_DriverLoader.SetDriverBinaryPath(driverFilePath);
+	ui.selectDriverPath->setText(driverFilePath);
+	onClickInstallDriver();
+	onClickStartDriver();
 }
 
 void DriverControlWindow::onClickSelectFile()
@@ -36,7 +49,14 @@ void DriverControlWindow::onClickSelectFile()
 	QString selectedFilePath = QFileDialog::getOpenFileName(this, "选择驱动文件", appPath, "driver files(*.sys)");
 	ui.selectDriverPath->setText(selectedFilePath);
 
+	if (selectedFilePath.isEmpty())
+		return;
+
 	_DriverLoader.SetDriverBinaryPath(selectedFilePath);
+	GSetting.SetDriverBinaryFilePath(selectedFilePath);
+
+	onClickInstallDriver();
+	onClickStartDriver();
 }
 
 void DriverControlWindow::onClickInstallDriver()

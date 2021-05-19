@@ -8,6 +8,7 @@
 #include "MainWindow.h"
 #include "DarkStyle.h"
 #include "framelesswindow.h"
+#include "gui/driver/DriverControlWindow.h"
 #include "log/CustomLogMessageHandler.h"
 
 #pragma comment(lib, "ntdll.lib")
@@ -54,10 +55,11 @@ int main(int argc, char* argv[])
 	//framelessWindow.setWindowIcon(a.style()->standardIcon(QStyle::SP_DesktopIcon));
 
 	// create our mainwindow instance
-	MainWindow mainWindow;
+	//MainWindow mainWindow;
+	DriverControlWindow dcw;
 
 	// add the mainwindow to our custom frameless window
-	framelessWindow.setContent(&mainWindow);
+	framelessWindow.setContent(&dcw);
 	framelessWindow.show();
 
 	return a.exec();

@@ -1,4 +1,4 @@
-﻿#include "GlobalSettings.h"
+#include "GlobalSettings.h"
 #include <QtCore/QtCore>
 
 GlobalSettings& GlobalSettings::Instance()
@@ -17,4 +17,19 @@ GlobalSettings::GlobalSettings()
 
 	auto sPath = appDir.absolutePath() + "/global_settings.ini";
 	mSettings = new QSettings(sPath, QSettings::IniFormat);
+}
+
+void GlobalSettings::SetDriverBinaryFilePath(const QString& path)
+{
+	mSettings->beginGroup("DRIVER");
+	mSettings->setValue("sys.path", path);
+	mSettings->sync();
+	mSettings->endGroup();
+}
+
+void GlobalSettings::GetDriverBinaryFilePath(QString& path)
+{
+	mSettings->beginGroup("DRIVER");
+	path = mSettings->value("sys.path").toString();
+	mSettings->endGroup();
 }
