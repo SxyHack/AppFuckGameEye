@@ -48,14 +48,14 @@ BOOL DriverControl::Connect()
 	return TRUE; 
 }
 
-BOOL DriverControl::SetupHooks()
+BOOL DriverControl::SetupSSDTHook()
 {
 	QByteArray params("App: Setup Hook...");
 	char results[256] = { 0 };
 	DWORD bytesReturned = 0;
 
 	BOOL ret = DeviceIoControl(_DeviceHandle,
-		IOCTL_SIOCTL_METHOD_BUFFERED,
+		IOCTL_FGE_HOOK_SSDT,
 		(LPVOID)params.constData(),
 		params.length(),
 		results,
@@ -72,5 +72,31 @@ BOOL DriverControl::SetupHooks()
 
 	qDebug() << "内核返回:" << results;
 
+	return TRUE;
+}
+
+BOOL DriverControl::SetupInfinityHook()
+{
+	QByteArray params("App: Setup Hook...");
+	char results[256] = { 0 };
+	DWORD bytesReturned = 0;
+
+	BOOL ret = DeviceIoControl(_DeviceHandle,
+		IOCTL_FGE_HOOK_INF,
+		NULL,
+		0,
+		results,
+		sizeof(results),
+		&bytesReturned,
+		NULL
+	);
+
+	if (!ret)
+	{
+		qCritical() << "DeviceIoControl()发生错误, " << GetLastError();
+		return FALSE;
+	}
+
+	qDebug() << "内核返回:" << results;
 	return TRUE;
 }

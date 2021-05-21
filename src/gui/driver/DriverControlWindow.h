@@ -24,6 +24,7 @@ private slots:
 	void onClickStopDriver();
 
 	void onClickTestHook();
+	void onClickTestHook2();
 
 private:
 	Ui::DriverControlWindow ui;

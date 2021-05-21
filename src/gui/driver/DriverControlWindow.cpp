@@ -18,6 +18,7 @@ DriverControlWindow::DriverControlWindow(QWidget* parent)
 	connect(ui.uninstallDriverBtn, SIGNAL(clicked()), this, SLOT(onClickUninstallDriver()));
 
 	connect(ui.testHookBtn, SIGNAL(clicked()), this, SLOT(onClickTestHook()));
+	connect(ui.testHook2Btn, SIGNAL(clicked()), this, SLOT(onClickTestHook2()));
 }
 
 DriverControlWindow::~DriverControlWindow()
@@ -124,9 +125,25 @@ void DriverControlWindow::onClickTestHook()
 		return;
 	}
 
-	if (!control.SetupHooks())
+	if (!control.SetupSSDTHook())
 	{
-		QMessageBox::warning(this, "警告", "测试HOOK SSDT失败");
+		QMessageBox::warning(this, "警告", "测试 SSDT HOOK 失败");
 		return;
 	}
+}
+
+void DriverControlWindow::onClickTestHook2()
+{
+	DriverControl control("FuckGameEye");
+	if (!control.Connect())
+	{
+		return;
+	}
+
+	if (!control.SetupInfinityHook())
+	{
+		QMessageBox::warning(this, "警告", "测试 Infinity HOOK 失败");
+		return;
+	}
+
 }

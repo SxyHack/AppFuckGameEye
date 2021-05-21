@@ -12,7 +12,8 @@ public:
 	~DriverControl();
 
 	BOOL Connect();
-	BOOL SetupHooks();
+	BOOL SetupSSDTHook();
+	BOOL SetupInfinityHook();
 
 private:
 	QString _DeviceName;
